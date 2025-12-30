@@ -210,7 +210,7 @@ header:hover, section:hover, article:hover, form:hover {
   color: #555;
 }
 
-@media (min-width: px) {
+@media (min-width: 1024px) {
 
   body {
     align-items: flex-start;
