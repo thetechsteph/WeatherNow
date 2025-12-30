@@ -61,7 +61,7 @@ body {
 }
 
 
-header, section, article, form {
+header, form, main article, main section{
   background: rgba(255, 255, 255, 0.6); 
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -74,6 +74,7 @@ header, section, article, form {
   max-width: 420px;
   transition: transform 0.3s, box-shadow 0.3s;
 }
+
 
 header:hover, section:hover, article:hover, form:hover {
   transform: translateY(-5px);
@@ -209,7 +210,7 @@ header:hover, section:hover, article:hover, form:hover {
   color: #555;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: px) {
 
   body {
     align-items: flex-start;
