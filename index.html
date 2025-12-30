@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Calendar / Date Picker -->
+  <button id="date-picker">
+    <i class="far fa-calendar-alt"></i>
+  </button>
+
+  <!-- Header: Location and Main Weather -->
+  <header class="location-header">
+    <p class="city">City</p>, <p class="country">Country</p>
+    <i class="fas" id="main-weather-icon"></i>
+  </header>
+
+<!-- Search Form -->
+<section class="search-section">
+  <form id="weather-form">
+    <input type="text" id="city-input" placeholder="Enter city" required>
+    <button type="submit"><i class="fas fa-search"></i> Search</button>
+  </form>
+</section>
+
+  <main>
+    <!-- Temperature -->
+    <h1 id="main-temperature">0°C</h1>
+
+    <!-- Forecast Summary -->
+    <article id="forecast-summary">
+      <p id="forecast-text">Weather description</p>
+    </article>
+
+    <!-- Weather Conditions -->
+    <section class="weather-conditions">
+      <span class="wind"><i class="fas fa-wind"></i> <span id="wind-speed">0 km/h</span></span>
+      <span class="humidity"><i class="fas fa-tint"></i> <span id="humidity">0%</span></span>
+      <span class="sunshine"><i class="fas fa-sun"></i> <span id="sunshine">0h</span></span>
+    </section>
+
+    <!-- Hourly Forecasts -->
+    <section class="hourly-forecast-container">
+      <h2>Hourly Forecast</h2>
+
+      <article class="hourly-forecast">
+        <i class="fas" id="hour1-icon"></i>
+        <p class="hour-time" id="hour1-time">00:00</p>
+        <p class="hour-temp" id="hour1-temp">0°C</p>
+      </article>
+
+      <article class="hourly-forecast">
+        <i class="fas" id="hour2-icon"></i>
+        <p class="hour-time" id="hour2-time">00:00</p>
+        <p class="hour-temp" id="hour2-temp">0°C</p>
+      </article>
+
+      <article class="hourly-forecast">
+        <i class="fas" id="hour3-icon"></i>
+        <p class="hour-time" id="hour3-time">00:00</p>
+        <p class="hour-temp" id="hour3-temp">0°C</p>
+      </article>
+
+      <article class="hourly-forecast">
+        <i class="fas" id="hour4-icon"></i>
+        <p class="hour-time" id="hour4-time">00:00</p>
+        <p class="hour-temp" id="hour4-temp">0°C</p>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- Navigation / Footer Icons -->
+  <nav class="bottom-nav">
+    <i class="fas fa-home"></i>
+    <i class="fas fa-search"></i>
+    <i class="fas fa-user"></i>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
