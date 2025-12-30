@@ -5,57 +5,34 @@ const countryEl = document.querySelector(".country");
 const mainWeatherIcon = document.getElementById("main-weather-icon");  
 const searchBtn = document.getElementById("search");  
 const weatherForm = document.getElementById("weather-form");  
-const cityInput = document.getElementById("city-input");  
+const cityInput = document.getElementById("city-input");
+const autocompleteContainer = document.getElementById("autocomplete-container");
+
 const mainTemperature = document.getElementById("main-temperature");  
 const forecastText = document.getElementById("forecast-text");  
 const windSpeedEl = document.getElementById("wind-speed");  
 const humidityEl = document.getElementById("humidity");  
-const sunshineEl = document.getElementById("sunshine");  
-const hourlyForecast = [  
-  {  
-    icon: document.getElementById("hour1-icon"),  
-    time: document.getElementById("hour1-time"),  
-    temp: document.getElementById("hour1-temp"),  
-  },  
-  {  
-    icon: document.getElementById("hour2-icon"),  
-    time: document.getElementById("hour2-time"),  
-    temp: document.getElementById("hour2-temp"),  
-  },  
-  {  
-    icon: document.getElementById("hour3-icon"),  
-    time: document.getElementById("hour3-time"),  
-    temp: document.getElementById("hour3-temp"),  
-  },  
-  {  
-    icon: document.getElementById("hour4-icon"),  
-    time: document.getElementById("hour4-time"),  
-    temp: document.getElementById("hour4-temp"),  
-  }  
-];  
+const sunshineEl = document.getElementById("sunshine");
+
+
+let cities = [];
+
+async function loadCities() {
+  try {
+    const response = await fetch('/cities.json');
+    if (!response.ok) throw new Error('Failed to load cities');
+    cities = await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+loadCities();
+
 const navIcons = document.querySelectorAll(".bottom-nav i");  
   
   
-  
-  
-const today = new Date();  
-const todayISO = today.toISOString().split("T")[0];  
-  
-const maxDate = new Date();  
-maxDate.setDate(today.getDate() + 7);   
-const maxDateISO = maxDate.toISOString().split("T")[0];  
-  
-datePicker.min = todayISO;  
-datePicker.max = maxDateISO;  
-  
-datePicker.addEventListener("change", () => {  
-  const selected = new Date(datePicker.value);  
-  
-  if (selected > maxDate) {  
-    alert("Weather data is only available for the next 7 days.");  
-    datePicker.value = maxDateISO;  
-  }  
-});  
   
   
 if ("geolocation" in navigator) {  
@@ -82,13 +59,14 @@ const API_KEY = "43d3e8ad029c76b64663d20d3270e33a";
   
 async function getWeatherByCoords(lat, lon) {  
     try {  
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);  
+      const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,daily,alerts&units=metric&appid=${API_KEY}`);  
         
       if (!response.ok) throw new Error('failed to fetch weather');  
         
       const data = await response.json();  
       console.log('Weather data:', data)  
-      updateWeatherUI(data);  
+      updateWeatherUI(data);
+
     } catch (error) {  
       console.log('error fetching data', error);  
     }  
@@ -102,7 +80,9 @@ function updateWeatherUI(data) {
   
   windSpeedEl.textContent = `${data.wind.speed} km/h`;  
   humidityEl.textContent = `${data.main.humidity}%`;  
-  sunshineEl.textContent = `${data.sys.sunrise}h`;   
+  
+  const sunriseDate = new Date(data.sys.sunrise * 1000);
+sunshineEl.textContent = `${sunriseDate.getHours()}h`;
   
   
   mainWeatherIcon.className = `fas ${getWeatherIcon(data.weather[0].main)}`;  
@@ -128,11 +108,32 @@ function getWeatherIcon(weatherMain) {
     default:  
       return "fa-question";  
   }  
-}  
-  
+}
+cityInput.addEventListener("input", () => {
+  const query = cityInput.value.toLowerCase();
+  autocompleteContainer.innerHTML = "";
+
+  if (!query) return;
+
+  const matches = cities.filter(c => c.city.toLowerCase().startsWith(query));
+
+  matches.forEach(c => {
+    const div = document.createElement("div");
+    div.textContent = `${c.city}, ${c.country}`;
+    div.classList.add("autocomplete-item");
+
+    div.addEventListener("click", () => {
+      cityInput.value = c.city;
+      autocompleteContainer.innerHTML = "";
+    });
+
+    autocompleteContainer.appendChild(div);
+  });
+});
 weatherForm.addEventListener("submit", async (e) => {  
   e.preventDefault();  
   const city = cityInput.value.trim();  
+  autocompleteContainer.innerHTML = "";
   if (!city) return;  
   
   try {  
@@ -142,7 +143,9 @@ weatherForm.addEventListener("submit", async (e) => {
     if (!response.ok) throw new Error("City not found");  
     const data = await response.json();  
     updateWeatherUI(data);  
+
   } catch (error) {  
     alert(error.message);  
   }  
 });
+
