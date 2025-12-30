@@ -57,20 +57,26 @@ if ("geolocation" in navigator) {
 const API_KEY = "43d3e8ad029c76b64663d20d3270e33a";  
   
   
-async function getWeatherByCoords(lat, lon) {  
-    try {  
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,daily,alerts&units=metric&appid=${API_KEY}`);  
-        
-      if (!response.ok) throw new Error('failed to fetch weather');  
-        
-      const data = await response.json();  
-      console.log('Weather data:', data)  
-      updateWeatherUI(data);
+async function getWeatherByCoords(lat, lon) {
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
+    );
 
-    } catch (error) {  
-      console.log('error fetching data', error);  
-    }  
-}  
+    if (!response.ok) throw new Error("Failed to fetch weather");
+
+    const data = await response.json();
+    console.log("Weather by location:", data);
+
+    updateWeatherUI(data);
+
+  
+    cityInput.value = data.name;
+
+  } catch (error) {
+    console.error(error);
+  }
+}
   
 function updateWeatherUI(data) {  
   cityEl.textContent = data.name;  
